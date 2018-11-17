@@ -1,4 +1,5 @@
 import React from 'react'
+import { Button } from "semantic-ui-react";
 class Blog extends React.Component {
   constructor(props) {
     super(props);
@@ -21,8 +22,7 @@ class Blog extends React.Component {
     const showDetails = { display: this.state.visible ? "" : "none" };
     const showDeleteButton = { display: this.props.blog.user.username === this.props.loggedUser.username ? '' : 'none'}
 
-    return (
-    <div style={blogStyle}>
+    return <div style={blogStyle}>
         <div onClick={this.toggleVisibility} className="name">
           <span className="bold">'{this.props.blog.title}'</span> Author: {this.props.blog.author}
         </div>
@@ -31,20 +31,13 @@ class Blog extends React.Component {
             {this.props.blog.url}
           </a>
           <br />
-          {this.props.blog.likes} likes <button
-            onClick={this.props.handleLikes}
-          >
-            like
-          </button>
+          Has {this.props.blog.likes} <Button content="Like" icon="heart" size='mini' onClick={this.props.handleLikes} />
           <br />
           Added by {this.props.blog.user.name}
           <br />
-          <button onClick={this.props.handleDelete} style={showDeleteButton}>
-            delete
-          </button>
+          <Button onClick={this.props.handleDelete} style={showDeleteButton} size='mini' content="DELETE" />
         </div>
-    </div>
-    )
+      </div>;
   }
 }
 

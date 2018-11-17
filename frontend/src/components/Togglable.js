@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from "prop-types";
+import { Button } from "semantic-ui-react";
 
 class Togglable extends React.Component {
   constructor(props) {
@@ -20,13 +21,13 @@ class Togglable extends React.Component {
     return (
       <div>
         <div style={hideWhenVisible}>
-          <button onClick={this.toggleVisibility}>
+          <Button size='mini' onClick={this.toggleVisibility} style={{marginTop: 20}}>
             {this.props.buttonLabel}
-          </button>
+          </Button>
         </div>
         <div style={showWhenVisible} className="togglableContent">
           {this.props.children}
-          <button onClick={this.toggleVisibility}>cancel</button>
+          <Button size='mini' onClick={this.toggleVisibility} style={{marginTop: 20}}>cancel</Button>
         </div>
       </div>
     );

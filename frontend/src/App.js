@@ -1,11 +1,19 @@
 import React from 'react'
-import Blog from './components/Blog'
+import {
+  BrowserRouter as Router,
+  Route
+} from "react-router-dom";
+import { Container } from "semantic-ui-react";
+import NavMenu from './components/NavMenu'
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
+import BlogList from "./components/BlogList";
+import UsersList from './components/UserList'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import userService from './services/users'
 import './App.css'
 
 class App extends React.Component {
@@ -13,6 +21,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       blogs: [],
+      users: [],
       title: "",
       author: "",
       url: "",
@@ -26,7 +35,7 @@ class App extends React.Component {
 
   componentDidMount() {
     blogService.getAll().then(blogs => this.setState({ blogs }));
-
+    userService.getAll().then(users => this.setState({ users }));
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
@@ -61,16 +70,10 @@ class App extends React.Component {
   };
 
   handleBlogFieldChange = event => {
-    if (event.target.name === "title") {
-      this.setState({ title: event.target.value });
-    } else if (event.target.name === "author") {
-      this.setState({ author: event.target.value });
-    } else if (event.target.name === "url") {
-      this.setState({ url: event.target.value });
-    }
-  };
+    this.setState({ [event.target.name]: event.target.value })
+  }
 
-  addBlog = async (event) => {
+  addBlog = async event => {
     event.preventDefault();
     const blogObject = {
       title: this.state.title,
@@ -79,18 +82,20 @@ class App extends React.Component {
       user: this.state.user
     };
     this.blogForm.toggleVisibility();
-    let newBlog = await blogService.create(blogObject)
-    newBlog = { ...newBlog, user: this.state.user }
-      this.setState({
-        blogs: this.state.blogs.concat(newBlog),
-        title: "",
-        url: "",
-        author: "",
-        success: `a new blog ${this.state.title} by ${this.state.user.username} added`
-      });
-      setTimeout(() => {
-        this.setState({ success: null });
-      }, 5000);
+    let newBlog = await blogService.create(blogObject);
+    newBlog = { ...newBlog, user: this.state.user };
+    this.setState({
+      blogs: this.state.blogs.concat(newBlog),
+      title: "",
+      url: "",
+      author: "",
+      success: `a new blog ${this.state.title} by ${
+        this.state.user.username
+      } added`
+    });
+    setTimeout(() => {
+      this.setState({ success: null });
+    }, 5000);
   };
 
   handleDelete = id => {
@@ -99,31 +104,28 @@ class App extends React.Component {
 
       try {
         if (window.confirm(`are you sure delete '${blog.title}'`)) {
-          if(this.state.user.name !== blog.user.name) {
-              this.setState({ error: "only creator can remove a blog" });
-              setTimeout(() => {
-                this.setState({ error: null });
-              }, 5000);
+          if (this.state.user.name !== blog.user.name) {
+            this.setState({ error: "only creator can remove a blog" });
+            setTimeout(() => {
+              this.setState({ error: null });
+            }, 5000);
           } else {
+            await blogService.remove(id);
 
-          await blogService.remove(id);
-
-          this.setState({
-            blogs: this.state.blogs.filter(blog => blog.id !== id),
-            success: `removed blog '${blog.title}'`
-          });
-          setTimeout(() => {
-            this.setState({ success: null });
-          }, 5000);
-          
+            this.setState({
+              blogs: this.state.blogs.filter(blog => blog.id !== id),
+              success: `removed blog '${blog.title}'`
+            });
+            setTimeout(() => {
+              this.setState({ success: null });
+            }, 5000);
+          }
         }
-      }
       } catch (exception) {
         this.setState({ error: "something went wrong" });
         setTimeout(() => {
           this.setState({ error: null });
         }, 5000);
-      
       }
     };
   };
@@ -139,34 +141,35 @@ class App extends React.Component {
     window.localStorage.removeItem("loggedBlogappUser");
   };
 
-  likeBlog = (id) => {
+  likeBlog = id => {
     return async () => {
       try {
         const blog = this.state.blogs.find(b => b.id === id);
         let blogObject = {
           ...blog,
           likes: blog.likes + 1
-        }
+        };
         if (blog.user) {
-          blogObject = { ...blogObject, user: blog.user._id }
+          blogObject = { ...blogObject, user: blog.user._id };
         }
 
-        let updatedBlog = await blogService.update(id, blogObject)
+        let updatedBlog = await blogService.update(id, blogObject);
         if (blog.user) {
-          updatedBlog = { ...updatedBlog, user: blog.user }
+          updatedBlog = { ...updatedBlog, user: blog.user };
         }
-          this.setState({
-            blogs: this.state.blogs.map(blog => blog.id !== id ? blog : updatedBlog)
-          })
+        this.setState({
+          blogs: this.state.blogs.map(blog =>
+            blog.id !== id ? blog : updatedBlog
+          )
+        });
       } catch (exception) {
         console.log("error: something went wrong");
       }
-    }
+    };
   };
 
   render() {
-    const blogsToShow = this.state.blogs.slice(0)
-      blogsToShow.sort((a, b) => b.likes - a.likes)
+    
     const blogForm = () => (
       <Togglable
         buttonLabel="new blog"
@@ -184,38 +187,41 @@ class App extends React.Component {
 
     if (this.state.user === null) {
       return (
-        <div>
-          <Notification.Alert message={this.state.error} />
-          <LoginForm
-            handleSubmit={this.login}
-            username={this.state.username}
-            password={this.state.password}
-            handleChange={this.handleLoginFieldChange}
-          />
-        </div>
+        <Container>
+          <div>
+            <Notification.Alert message={this.state.error} />
+            <LoginForm
+              handleSubmit={this.login}
+              username={this.state.username}
+              password={this.state.password}
+              handleChange={this.handleLoginFieldChange}
+            />
+          </div>
+        </Container>
       );
     } else {
-
-      return <div>
-        <Notification.Success message={this.state.success} />
-        <div>
-          <p>{this.state.user.name} logged in</p>
-          <button onClick={this.handleLogoutButton}>logout</button>
-          {blogForm()}
-        </div>
-        <h2>Blogs</h2>
-        <div>
-        {blogsToShow.map(blog => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            handleLikes={this.likeBlog(blog.id)}
-            handleDelete={this.handleDelete(blog.id)}
-            loggedUser={this.state.user}
-          />
-        ))}
-      </div>
-      </div>;
+      return <Container>
+          <Router>
+            <div>
+              <div>
+                <Notification.Success message={this.state.success} />
+              </div>
+              <div>
+                <NavMenu
+                handleLogoutButton={this.handleLogoutButton}
+                username={this.state.user.name}
+                />
+              </div>
+              <div>
+                {blogForm()}
+              </div>
+              <div>
+                <Route exact path="/" render={() => <BlogList blogs={this.state.blogs} likeBlog={this.likeBlog} handleDelete={this.handleDelete} loggedUser={this.state.user} />} />
+                <Route path="/users" render={() => <UsersList users={this.state.users} />} />
+              </div>
+            </div>
+          </Router>;
+        </Container>;
     }
   }
 }
