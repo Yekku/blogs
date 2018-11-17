@@ -1,25 +1,33 @@
-import React from 'react';
-import { Table } from 'semantic-ui-react'
+import React from "react";
+import { Link } from "react-router-dom";
+import { Table } from "semantic-ui-react";
 
-const UsersList = props => {
-  const userRows = props.users.map(user => (
+const UserList = props => {
+  const users = props.users.map(user => (
     <Table.Row key={user.id}>
-      <Table.Cell>{user.name}</Table.Cell>
+      <Table.Cell>
+        <Link to={`/users/${user.id}`}>{user.name}</Link>
+      </Table.Cell>
       <Table.Cell>{user.blogs.length}</Table.Cell>
     </Table.Row>
   ));
-  return <div>
+
+  return <div className="users">
       <h2>Users</h2>
       <Table collapsing>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>User name</Table.HeaderCell>
-            <Table.HeaderCell>Blogs</Table.HeaderCell>
+            <Table.HeaderCell>
+              <h3>User name</h3>
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              <h3>Blogs</h3>
+            </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
-        <Table.Body>{userRows}</Table.Body>
+        <Table.Body>{users}</Table.Body>
       </Table>
     </div>;
-}
+};
 
-export default UsersList;
+export default UserList

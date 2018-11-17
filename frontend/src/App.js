@@ -2,15 +2,19 @@ import React from 'react'
 import {
   BrowserRouter as Router,
   Route
-} from "react-router-dom";
-import { Container } from "semantic-ui-react";
+} from "react-router-dom"
+import { Container } from "semantic-ui-react"
 import NavMenu from './components/NavMenu'
+import About from './components/About'
 import Notification from './components/Notification'
+import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
-import BlogList from "./components/BlogList";
+import BlogList from "./components/BlogList"
+import User from './components/User'
 import UsersList from './components/UserList'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
+import Footer from './components/Footer'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import userService from './services/users'
@@ -98,7 +102,7 @@ class App extends React.Component {
     }, 5000);
   };
 
-  handleDelete = id => {
+  deleteBlog = id => {
     return async () => {
       const blog = this.state.blogs.find(b => b.id === id);
 
@@ -169,10 +173,18 @@ class App extends React.Component {
   };
 
   render() {
+
+    const userById = id => {
+      return this.state.users.find(user => user.id === id);
+    };
+
+    const blogById = id => {
+      return this.state.blogs.find(blog => blog.id === id);
+    };
     
     const blogForm = () => (
       <Togglable
-        buttonLabel="new blog"
+        buttonLabel="New Blog"
         ref={component => (this.blogForm = component)}
       >
         <BlogForm
@@ -207,20 +219,23 @@ class App extends React.Component {
                 <Notification.Success message={this.state.success} />
               </div>
               <div>
-                <NavMenu
-                handleLogoutButton={this.handleLogoutButton}
-                username={this.state.user.name}
-                />
+                <NavMenu handleLogoutButton={this.handleLogoutButton} username={this.state.user.name} />
               </div>
               <div>
                 {blogForm()}
+                </div>
+              <div>
+                <Route exact path="/blogs" render={() => <BlogList blogs={this.state.blogs} likeBlog={this.likeBlog} handleDelete={this.handleDelete} loggedUser={this.state.user} />} />
+                <Route exact path="/blogs/:id" render={({ match }) => <Blog blog={blogById(match.params.id)} likeBlog={this.likeBlog} loggedUser={this.state.user} clickHandle={this.deleteBlog} />} />
+                <Route exact path="/users" render={() => <UsersList users={this.state.users} />} />
+                <Route exact path="/users/:id" render={({ match }) => <User user={userById(match.params.id)} />} />
+                <Route exact path="/about" render={() => <About />} />
               </div>
               <div>
-                <Route exact path="/" render={() => <BlogList blogs={this.state.blogs} likeBlog={this.likeBlog} handleDelete={this.handleDelete} loggedUser={this.state.user} />} />
-                <Route path="/users" render={() => <UsersList users={this.state.users} />} />
+                <Footer />
               </div>
             </div>
-          </Router>;
+          </Router>
         </Container>;
     }
   }

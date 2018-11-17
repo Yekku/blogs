@@ -1,44 +1,47 @@
-import React from 'react'
-import { Button } from "semantic-ui-react";
-class Blog extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      visible: false
-    };
+import React from "react";
+import { Button, Header, Segment } from "semantic-ui-react"
+
+const Blog = ({ blog, likeBlog, clickHandle, loggedUser }) => {
+  if (!blog) {
+    return null;
   }
 
-  toggleVisibility = () => {
-    this.setState({ visible: !this.state.visible });
+  const likes = `${blog.likes}`;
+  const showDeleteButton = {
+    display: blog.user.username === loggedUser.username ? "" : "none"
   };
 
-  render() {
-    const blogStyle = {
-      paddingTop: 10,
-      paddingLeft: 2,
-      border: "1px solid black",
-      marginBottom: 5
-    };
-    const showDetails = { display: this.state.visible ? "" : "none" };
-    const showDeleteButton = { display: this.props.blog.user.username === this.props.loggedUser.username ? '' : 'none'}
-
-    return <div style={blogStyle}>
-        <div onClick={this.toggleVisibility} className="name">
-          <span className="bold">'{this.props.blog.title}'</span> Author: {this.props.blog.author}
-        </div>
-        <div style={showDetails} className="content">
-          <a href={this.props.blog.url} target="blanck">
-            {this.props.blog.url}
+  return (
+    <div>
+      <Header as="h2" attached="top">
+        {blog.title}
+      </Header>
+      <Segment attached>
+        <p>By {blog.author}</p>
+        <p>
+          For more information see this{" "}
+          <a href={blog.url} target="blanck">
+            link
           </a>
-          <br />
-          Has {this.props.blog.likes} <Button content="Like" icon="heart" size='mini' onClick={this.props.handleLikes} />
-          <br />
-          Added by {this.props.blog.user.name}
-          <br />
-          <Button onClick={this.props.handleDelete} style={showDeleteButton} size='mini' content="DELETE" />
-        </div>
-      </div>;
-  }
-}
+        </p>
+        <Button
+          content="Like"
+          icon="heart"
+          onClick={() => likeBlog(blog)}
+          label={{ basic: true, pointing: "right", content: likes }}
+          labelPosition="left"
+          size="mini"
+        />
+        <p style={{ marginTop: 10 }}>Added by {blog.user.username}</p>
+        <Button
+          onClick={() => clickHandle(blog)}
+          style={showDeleteButton}
+          size="mini"
+          content="Delete Blog"
+        />
+      </Segment>
+    </div>
+  );
+};
 
 export default Blog

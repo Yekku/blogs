@@ -19,11 +19,11 @@ export default class NavMenu extends Component {
     return (
       <div>
         <Menu pointing secondary>
-          <Menu.Item as={Link} to={`/`}>
+          <Menu.Item as={Link} to={`/blogs`}>
           <h2>Blog app</h2>
         </Menu.Item>
           <Menu.Item
-          as={Link} to={`/`}
+          as={Link} to={`/blogs`}
             name='Blogs'
             active={activeItem === 'Blogs'}
             onClick={this.handleItemClick}
@@ -34,9 +34,15 @@ export default class NavMenu extends Component {
             active={activeItem === 'Users'}
             onClick={this.handleItemClick}
           />
+          <Menu.Item
+            as={Link} to={`/about`}
+            name='About'
+            active={activeItem === 'About'}
+            onClick={this.handleItemClick}
+          />
           <Menu.Menu position='right'>
             <Menu.Item>
-           {this.props.username} logged in
+              Logged in as {this.props.username}
             </Menu.Item>
             <Menu.Item
               name='Logout'
