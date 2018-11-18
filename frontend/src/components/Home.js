@@ -6,13 +6,12 @@ const About = () => (
     <Grid.Row>
       <Grid.Column width={16}>
         <div>
-          <h2>About blog app</h2>
+          <h2>Blog app</h2>
         </div>
       </Grid.Column>
       <Grid.Column width={16}>
         <div style={{ margin: 20 }}>
-          <h3>What is a Blog?</h3>
-          <h4>Definition of blog</h4>
+          <h3>Definition of blog</h3>
           <p>
             A blog (shortening of “weblog”) is an online journal or
             informational website displaying information in the reverse
@@ -20,7 +19,7 @@ const About = () => (
             platform where a writer or even a group of writers share their views
             on an individual subject.
           </p>
-          <h4>Blog structure</h4>
+          <h3>Blog structure</h3>
           <p>
             The appearance of blogs changed over time, and nowadays blogs
             include different items. But, most blogs include some standard

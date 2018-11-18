@@ -27,14 +27,14 @@ const Blog = ({ blog, likeBlog, clickHandle, loggedUser }) => {
         <Button
           content="Like"
           icon="heart"
-          onClick={() => likeBlog(blog)}
+          onClick={likeBlog(blog.id)}
           label={{ basic: true, pointing: "right", content: likes }}
           labelPosition="left"
           size="mini"
         />
         <p style={{ marginTop: 10 }}>Added by {blog.user.username}</p>
         <Button
-          onClick={() => clickHandle(blog)}
+          onClick={clickHandle(blog.id)}
           style={showDeleteButton}
           size="mini"
           content="Delete Blog"

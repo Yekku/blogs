@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from "react-router-dom";
 import { Menu } from 'semantic-ui-react'
 
-export default class NavMenu extends Component {
+class NavMenu extends Component {
 
   constructor(props) {
     super(props)
@@ -19,9 +19,15 @@ export default class NavMenu extends Component {
     return (
       <div>
         <Menu pointing secondary>
-          <Menu.Item as={Link} to={`/blogs`}>
+          <Menu.Item as={Link} to={`/`}>
           <h2>Blog app</h2>
-        </Menu.Item>
+          </Menu.Item>
+          <Menu.Item
+            as={Link} to={`/`}
+            name='Home'
+            active={activeItem === 'Home'}
+            onClick={this.handleItemClick}
+          />
           <Menu.Item
           as={Link} to={`/blogs`}
             name='Blogs'
@@ -34,17 +40,13 @@ export default class NavMenu extends Component {
             active={activeItem === 'Users'}
             onClick={this.handleItemClick}
           />
-          <Menu.Item
-            as={Link} to={`/about`}
-            name='About'
-            active={activeItem === 'About'}
-            onClick={this.handleItemClick}
-          />
+          
           <Menu.Menu position='right'>
             <Menu.Item>
-              Logged in as {this.props.username}
+              <em>Logged in as {this.props.username}</em>
             </Menu.Item>
             <Menu.Item
+              as={Link} to={`/`}
               name='Logout'
               active={activeItem === 'Logout'}
               onClick={this.props.handleLogoutButton}
@@ -56,3 +58,5 @@ export default class NavMenu extends Component {
     )
   }
 }
+
+export default NavMenu
