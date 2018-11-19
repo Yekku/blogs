@@ -61,8 +61,9 @@ blogsRouter.post('/', async (request, response) => {
       author: body.author,
       url: body.url,
       likes: body.likes === undefined ? 0 : body.likes,
+      comments: body.comments === undefined ? [] : body.comments,
       user: user._id
-    })
+    });
 
     const savedBlog = await blog.save()
 
@@ -77,6 +78,30 @@ blogsRouter.post('/', async (request, response) => {
       console.log(exception)
       response.status(500).json({ error: 'something went wrong...' })
     }
+  }
+})
+
+blogsRouter.post('/:id/comments', async (request, response) => {
+  try {
+    const body = request.body
+
+    const blog = {
+      // title: body.title,
+      // author: body.author,
+      // url: body.url,
+      // likes: body.likes,
+      comments: body.comments
+    }
+
+    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
+      new: true
+    });
+    response.json(Blog.format(updatedBlog));
+  } catch (exception) {
+    console.log(exception);
+    response.status(400).send({
+      error: 'malformatted id'
+    })
   }
 })
 
@@ -109,7 +134,8 @@ blogsRouter.put('/:id', async (request, response) => {
       title: body.title,
       author: body.author,
       url: body.url,
-      likes: body.likes
+      likes: body.likes,
+      comments: body.comments
     }
 
     const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {

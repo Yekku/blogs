@@ -143,6 +143,34 @@ class App extends React.Component {
     };
   };
 
+  commentBlog = async (id, comment) => {
+    console.log('comment: ', comment);
+    
+    try {
+      const blog = this.state.blogs.find(b => b.id === id)
+      let blogObject = {
+        ...blog,
+        comments: blog.comments.concat(comment)
+      };
+
+      if (blog.user) {
+        blogObject = { ...blogObject, user: blog.user._id };
+      }
+
+      let updatedBlog = await blogService.comment(id, blogObject);
+      if (blog.user) {
+        updatedBlog = { ...updatedBlog, user: blog.user };
+      }
+      this.setState({
+        blogs: this.props.blogs.map(blog =>
+          blog.id !== id ? blog : updatedBlog
+        )
+      });
+    } catch (exception) {
+      console.log("error: something went wrong");
+    }
+  };
+
   likeBlog = id => {
     return async () => {
       try {
@@ -221,7 +249,7 @@ class App extends React.Component {
               <div>
                 <Route exact path="/" render={() => <Home />} />
                 <Route exact path="/blogs" render={() => <BlogList blogs={this.state.blogs} likeBlog={this.likeBlog} handleDelete={this.handleDelete} loggedUser={this.state.user} />} />
-                <Route exact path="/blogs/:id" render={({ match }) => <Blog blog={blogById(match.params.id)} likeBlog={this.likeBlog} loggedUser={this.state.user} clickHandle={this.deleteBlog} />} />
+                <Route exact path="/blogs/:id" render={({ match }) => <Blog blog={blogById(match.params.id)} likeBlog={this.likeBlog} commentBlog={this.commentBlog} loggedUser={this.state.user} clickHandle={this.deleteBlog} />} />
                 <Route exact path="/users" render={() => <UsersList users={this.state.users} />} />
                 <Route exact path="/users/:id" render={({ match }) => <User user={userById(match.params.id)} />} />
               </div>
