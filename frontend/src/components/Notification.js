@@ -1,17 +1,24 @@
 import React from "react";
+import { connect } from "react-redux";
+import { Message } from "semantic-ui-react";
 
-const Success = ({ message }) => {
-  if (message === null) {
-    return null;
-  }
-  return <div className="success">{message}</div>;
-};
+class Notification extends React.Component {
+  render() {
+    const notification = this.props.notification
 
-const Alert = ({ message }) => {
-  if (message === null) {
-    return null;
+    if (notification === "" || notification === null) {
+      return null;
+    }
+    return <Message success>{notification}</Message>;
   }
-  return <div className="error">{message}</div>;
 }
 
-export default { Success, Alert };
+const mapStateToProps = state => {
+  return {
+    notification: state.notification
+  };
+};
+
+const ConnectedNotification = connect(mapStateToProps)(Notification);
+
+export default ConnectedNotification;

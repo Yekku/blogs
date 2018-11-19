@@ -1,6 +1,7 @@
 import React from 'react'
+import { connect } from "react-redux";
 import { BrowserRouter as Router, Route } from "react-router-dom"
-import { Container } from "semantic-ui-react"
+import { Container, Message } from "semantic-ui-react"
 import NavMenu from './components/NavMenu'
 import Home from './components/Home'
 import Notification from './components/Notification'
@@ -16,6 +17,7 @@ import Footer from './components/Footer'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import userService from './services/users'
+import { notify } from "./reducers/notificationReducer";
 import './App.css'
 class App extends React.Component {
   constructor(props) {
@@ -27,7 +29,6 @@ class App extends React.Component {
       author: "",
       url: "",
       error: null,
-      success: null,
       user: null
     };
   }
@@ -49,9 +50,10 @@ class App extends React.Component {
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
       blogService.setToken(user.token)
       this.setState({ user })
+      this.props.notify(`Welcome back ${user.name} !`, 5);
     } catch (exception) {
       this.setState({
-        error: "wrong username or password"
+        error: "Wrong username or password"
       });
       setTimeout(() => {
         this.setState({ error: null });
@@ -68,14 +70,11 @@ class App extends React.Component {
 
   addNewUser = async user => {
     try {
-      let newUser = await userService.create(user);
+      let newUser = await userService.create(user)
+      this.props.notify(`A new user ${newUser.name} created`, 5);
       this.setState({
-        users: this.state.users.concat(newUser),
-        success: `a new user ${newUser.name} created`
-      });
-      setTimeout(() => {
-        this.setState({ success: null });
-      }, 5000);
+        users: this.state.users.concat(newUser)
+      })
     } catch (exception) {
       this.setState({
         error: "Username must be atleast 3 characters and unique"
@@ -96,21 +95,16 @@ class App extends React.Component {
       const blogObject = { title: this.state.title, author: this.state.author, url: this.state.url, user: this.state.user };
       this.blogForm.toggleVisibility();
       let newBlog = await blogService.create(blogObject);
-      newBlog = { ...newBlog, user: this.state.user };
+      newBlog = { ...newBlog, user: this.state.user }
+      this.props.notify(`A new blog ${this.state.title} by ${this.state.user.username} added`, 5);
       this.setState({
         blogs: this.state.blogs.concat(newBlog),
         title: "",
         url: "",
-        author: "",
-        success: `a new blog ${this.state.title} by ${
-          this.state.user.username
-        } added`
-      });
-      setTimeout(() => {
-        this.setState({ success: null });
-      }, 5000);
+        author: ""
+      })
     } catch (exception) {
-      this.setState({ error: "title or url missing" });
+      this.setState({ error: "Title or url missing" });
       setTimeout(() => {
         this.setState({ error: null });
       }, 5000);
@@ -123,19 +117,15 @@ class App extends React.Component {
       const blog = this.state.blogs.find(b => b.id === id);
 
       try {
-        if (window.confirm(`are you sure delete '${blog.title}'`)) {
-          await blogService.remove(id);
-
+        if (window.confirm(`Are you sure delete '${blog.title}'`)) {
+          await blogService.remove(id)
+          this.props.notify(`Removed blog '${blog.title}`, 5);
           this.setState({
             blogs: this.state.blogs.filter(b => b._id !== id),
-            success: `removed blog '${blog.title}'`
-          });
-          setTimeout(() => {
-            this.setState({ success: null });
-          }, 5000);
+          })
         }
       } catch (exception) {
-        this.setState({ error: "something went wrong" });
+        this.setState({ error: "Something went wrong" });
         setTimeout(() => {
           this.setState({ error: null });
         }, 5000);
@@ -167,7 +157,10 @@ class App extends React.Component {
         )
       });
     } catch (exception) {
-      console.log("error: something went wrong");
+      this.setState({ error: "Something went wrong" });
+      setTimeout(() => {
+        this.setState({ error: null });
+      }, 5000);
     }
   };
 
@@ -175,10 +168,7 @@ class App extends React.Component {
     return async () => {
       try {
         const blog = this.state.blogs.find(b => b.id === id);
-        let blogObject = {
-          ...blog,
-          likes: blog.likes + 1
-        };
+        let blogObject = { ...blog, likes: blog.likes + 1 };
 
         if (blog.user) {
           blogObject = { ...blogObject, user: blog.user._id };
@@ -188,13 +178,17 @@ class App extends React.Component {
         if (blog.user) {
           updatedBlog = { ...updatedBlog, user: blog.user };
         }
+        this.props.notify(`You liked '${blog.title} !`, 5);
         this.setState({
           blogs: this.state.blogs.map(blog =>
             blog.id !== id ? blog : updatedBlog
           )
         });
       } catch (exception) {
-        console.log("error: something went wrong");
+        this.setState({ error: "Something went wrong" });
+        setTimeout(() => {
+          this.setState({ error: null });
+        }, 5000);
       }
     };
   };
@@ -227,8 +221,11 @@ class App extends React.Component {
       return <Container>
           <Router>
             <div>
-              <Notification.Success message={this.state.success} />
-              <Notification.Alert message={this.state.error} />
+            {(this.state.error &&
+              <Message negative>
+                {this.state.error}
+              </Message>)}
+              <Notification />
               <LoginForm login={this.login} />
               <Route exact path="/create-new-user" render={({ history }) => <NewUserForm addNewUser={this.addNewUser} history={history} />} />
             </div>
@@ -239,8 +236,11 @@ class App extends React.Component {
           <Router>
             <div>
               <div>
-                <Notification.Success message={this.state.success} />
-                <Notification.Alert message={this.state.error} />
+              {(this.state.error &&
+                <Message negative>
+                  {this.state.error}
+                </Message>)}
+              <Notification />
               </div>
               <div>
                 <NavMenu handleLogoutButton={this.handleLogoutButton} username={this.state.user.name} />
@@ -263,4 +263,7 @@ class App extends React.Component {
   }
 }
 
-export default App
+export default connect(
+  null,
+  { notify }
+)(App);
