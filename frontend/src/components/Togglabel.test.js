@@ -1,5 +1,6 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
+// eslint-disable-next-line no-unused-vars
 import Adapter from 'enzyme-adapter-react-16'
 import Blog from './Blog'
 import Togglable from './Togglable'
@@ -10,13 +11,13 @@ describe('<Togglable />', () => {
   beforeEach(() => {
     togglableComponent = shallow(
       <Togglable buttonLabel="show...">
-        <div class="testDiv" />
+        <div className="testDiv" />
       </Togglable>
     )
   })
 
   it('renders its children', () => {
-    expect(togglableComponent.contains(<div class="testDiv" />)).toEqual(true)
+    expect(togglableComponent.contains(<div className="testDiv" />)).toEqual(true)
   })
 
   it('at start the children are not displayed', () => {
@@ -43,9 +44,9 @@ describe('<Togglable />', () => {
     }
 
     const togglableComponent = shallow(<Togglable buttonLabel="show...">
-        <Blog blog={blog1} loggedUser={"secret"} />
+      <Blog blog={blog1} loggedUser={'secret'} />
       <Blog blog={blog2} loggedUser={'secret'}/>
-      </Togglable>);
+    </Togglable>)
 
     console.log(togglableComponent.debug())
   })
@@ -71,9 +72,9 @@ describe('<Togglable />', () => {
     }
 
     const blogComponent = mount(<Togglable buttonLabel="show...">
-        <Blog blog={blog1} loggedUser={"secret"} />
+      <Blog blog={blog1} loggedUser={'secret'} />
       <Blog blog={blog2} loggedUser={'secret'}/>
-      </Togglable>);
+    </Togglable>)
 
     console.log(blogComponent.debug())
   })

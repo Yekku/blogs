@@ -13,9 +13,9 @@ describe.only('<SimpleBlog />', () => {
     const simpleBlogComponent = shallow(<SimpleBlog blog={blog} />)
     console.log(simpleBlogComponent.debug())
     const headerDiv = simpleBlogComponent.find('.header')
-    console.log(headerDiv.debug());
+    console.log(headerDiv.debug())
     const likesDiv = simpleBlogComponent.find('.likes')
-    console.log(likesDiv.debug());
+    console.log(likesDiv.debug())
 
     expect(headerDiv.text()).toContain(blog.title)
     expect(headerDiv.text()).toContain(blog.author)

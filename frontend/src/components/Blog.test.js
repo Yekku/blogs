@@ -15,23 +15,22 @@ describe.only('<Blog />', () => {
         username: 'secret'
       }
     }
-    blogComponent = shallow(<Blog blog={blog} loggedUser={'secret'} />);
+    blogComponent = shallow(<Blog blog={blog} loggedUser={'secret'} />)
   })
 
   it('it renders title and author', () => {
-    
+
     const nameDiv = blogComponent.find('.name')
-    console.log(nameDiv.debug());
-    
+    console.log(nameDiv.debug())
     expect(nameDiv.text()).toContain(blog.title)
     expect(nameDiv.text()).toContain(blog.author)
   })
 
   it('after clicking name the details are displayed', () => {
-    
+
 
     const nameDiv = blogComponent.find('.name')
-    console.log(nameDiv.debug());
+    console.log(nameDiv.debug())
 
     nameDiv.simulate('click')
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Grid } from 'semantic-ui-react'
 
-const About = () => (
+const Home = () => (
   <Grid reversed="mobile vertically">
     <Grid.Row>
       <Grid.Column width={16}>
@@ -33,6 +33,6 @@ const About = () => (
       </Grid.Column>
     </Grid.Row>
   </Grid>
-);
+)
 
-export default About
+export default Home

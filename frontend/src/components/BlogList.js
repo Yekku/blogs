@@ -1,26 +1,33 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { List } from "semantic-ui-react";
+import React from 'react'
+import { connect } from 'react-redux'
+import { List } from 'semantic-ui-react'
+import { Link } from 'react-router-dom'
 
-const BlogList = props => {
-  const byLikes = (b1, b2) => b2.likes - b1.likes
-
-  const blogsInOrder = props.blogs.sort(byLikes)
-  return <div>
+class BlogList extends React.Component {
+  render() {
+    return <div>
       <h2>Blogs</h2>
-      <List divided relaxed>
-        {blogsInOrder.map(blog =>
-          <List.Item key={blog.id}>
-            <List.Icon name="book" size="large" verticalAlign="middle" />
-            <List.Content>
-              <List.Header as={Link} to={`/blogs/${blog.id}`}>
-                {blog.title}
-              </List.Header>
-              <List.Description>By {blog.author}</List.Description>
-            </List.Content>
-          </List.Item>)}
+      <List>
+        {this.props.blogs.map(blog => <List.Item key={blog._id}>
+          <List.Icon name="book" size="large" verticalAlign="middle" />
+          <List.Content>
+            <List.Header as={Link} to={`/blogs/${blog._id}`}>
+              {blog.title}
+            </List.Header>
+            <List.Description>By {blog.author}</List.Description>
+          </List.Content>
+        </List.Item>)}
       </List>
-    </div>;
-};
+    </div>
+  }
+}
 
-export default BlogList;
+const mapStateToProps = (state) => {
+  const byLikes = (b1, b2) => b2.likes - b1.likes
+  const blogsInOrder = state.blogs.sort(byLikes)
+  return {
+    blogs: blogsInOrder,
+  }
+}
+
+export default connect(mapStateToProps, null)(BlogList)
