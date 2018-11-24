@@ -20,7 +20,7 @@ import { initUsers } from './reducers/userReducer'
 import { initBlogs } from './reducers/blogReducer'
 import { login } from './reducers/loginReducer'
 import './App.css'
-class App extends React.Component {
+export class App extends React.Component {
 
   componentDidMount() {
     this.props.initBlogs()

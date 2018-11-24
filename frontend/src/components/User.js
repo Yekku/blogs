@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { List } from 'semantic-ui-react'
 
-class User extends React.Component {
+export class User extends React.Component {
 
   render() {
     const { user } = this.props

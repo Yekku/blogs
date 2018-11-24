@@ -5,7 +5,7 @@ import { notify } from '../reducers/notificationReducer'
 import { Link } from 'react-router-dom'
 import { Menu } from 'semantic-ui-react'
 
-class NavMenu extends Component {
+export class NavMenu extends Component {
 
   constructor(props) {
     super(props)

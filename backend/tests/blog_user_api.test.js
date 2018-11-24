@@ -58,7 +58,7 @@ describe('blogs api', async () => {
       const aBlog = blogsInDatabase[0]
 
       const response = await api
-        .get(`/api/blogs/${aBlog.id}`)
+        .get(`/api/blogs/${aBlog._id}`)
         .expect(200)
         .expect('Content-Type', /application\/json/)
 
@@ -137,7 +137,7 @@ describe('blogs api', async () => {
         expect(likesAfterPost).toContain(0)
       })
 
-      test('POST /api/notes fails with proper statuscode if title and/or url is missing', async () => {
+      test('POST /api/blogs fails with proper statuscode if title and/or url is missing', async () => {
         const newBlog = { author: 'Michael Chan', likes: 7 }
 
         const blogsAtStart = await blogsInDb()
@@ -162,7 +162,8 @@ describe('blogs api', async () => {
           title: 'Update blog pyynnöllä HTTP PUT',
           author: 'Yekku',
           url: 'http://localhost',
-          likes: 1
+          likes: 1,
+          comments: []
         })
         await addedBlog.save()
       })
@@ -195,6 +196,31 @@ describe('blogs api', async () => {
 
         const likesAfterPut = blogsAfterPut.map(b => b.likes)
         expect(likesAfterPut).toContain(newBlog.likes)
+      })
+
+      test('PUT /api/blogs/:id succeeds and new comment added', async () => {
+        const updatedBlog = {
+          title: 'Blog for comment',
+          author: 'Robert C. Martin',
+          url: 'http://blog.cleancoder.com',
+          likes: 2,
+          comments: ['I like this post!']
+        }
+
+        const blogsBeforePut = await blogsInDb()
+
+        await api
+          .put(`/api/blogs/${addedBlog._id}`)
+          .set('Authorization', 'bearer ' + token)
+          .send(updatedBlog)
+          .expect(200)
+          .expect('Content-Type', /application\/json/)
+
+        const blogsAfterPut = await blogsInDb()
+
+        expect(blogsAfterPut.length).toBe(blogsBeforePut.length)
+        expect(blogsAfterPut).not.toEqual(blogsBeforePut)
+
       })
 
       test('400 is returned by PUT /api/blogs/:id with invalid id', async () => {
@@ -234,7 +260,7 @@ describe('blogs api', async () => {
 
         const blogsBeforeDelete = await blogsInDb()
 
-        const id = res.body.id
+        const id = res.body._id
 
         await api
           .delete('/api/blogs/' + id)
@@ -306,7 +332,7 @@ describe('users api', () => {
         const usersAfterOperation = await usersInDb()
         expect(usersAfterOperation.length).toBe(usersBeforeOperation.length + 1)
 
-        const savedUser = await User.findById(res.body.id)
+        const savedUser = await User.findById(res.body._id)
         expect(savedUser.adult).toEqual(true)
       })
     })

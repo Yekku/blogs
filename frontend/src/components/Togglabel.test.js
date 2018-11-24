@@ -1,17 +1,16 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
-// eslint-disable-next-line no-unused-vars
-import Adapter from 'enzyme-adapter-react-16'
+import { shallow } from 'enzyme'
 import Blog from './Blog'
-import Togglable from './Togglable'
+import { Togglable } from './Togglable'
 
 describe('<Togglable />', () => {
   let togglableComponent
-
+  const mockTogglablefn = jest.fn()
   beforeEach(() => {
     togglableComponent = shallow(
-      <Togglable buttonLabel="show...">
+      <Togglable buttonLabel="show..." onClick={mockTogglablefn}>
         <div className="testDiv" />
+
       </Togglable>
     )
   })
@@ -25,13 +24,6 @@ describe('<Togglable />', () => {
     expect(div.getElement().props.style).toEqual({ display: 'none' })
   })
 
-  it('after clicking the button, children are displayed', () => {
-    const button = togglableComponent.find('button')
-
-    button.at(0).simulate('click')
-    const div = togglableComponent.find('.togglableContent')
-    expect(div.getElement().props.style).toEqual({ display: '' })
-  })
 
   it('shallow renders only one level', () => {
     const blog1 = {
@@ -44,38 +36,11 @@ describe('<Togglable />', () => {
     }
 
     const togglableComponent = shallow(<Togglable buttonLabel="show...">
-      <Blog blog={blog1} loggedUser={'secret'} />
-      <Blog blog={blog2} loggedUser={'secret'}/>
+      <Blog blog={blog1} />
+      <Blog blog={blog2} />
     </Togglable>)
 
     console.log(togglableComponent.debug())
   })
 
-  it('mount renders all components', () => {
-    const blog1 = {
-      title: 'Just for test',
-      author: 'Yevgen Liukkonen',
-      url: 'http://localhost',
-      likes: 10,
-      user: {
-        username: 'secret'
-      }
-    }
-    const blog2 = {
-      title: 'Just for test',
-      author: 'Yevgen Liukkonen',
-      url: 'http://localhost',
-      likes: 10,
-      user: {
-        username: 'secret'
-      }
-    }
-
-    const blogComponent = mount(<Togglable buttonLabel="show...">
-      <Blog blog={blog1} loggedUser={'secret'} />
-      <Blog blog={blog2} loggedUser={'secret'}/>
-    </Togglable>)
-
-    console.log(blogComponent.debug())
-  })
 })

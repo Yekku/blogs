@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Table } from 'semantic-ui-react'
 
-class UserList extends React.Component {
+export class UserList extends React.Component {
   render () {
     const users = this.props.users.map(user => (
       <Table.Row key={user._id}>

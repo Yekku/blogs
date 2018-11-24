@@ -40,7 +40,7 @@ blogsRouter.post('/', async (request, response) => {
         .json({ error: 'token missing or invalid' })
     }
 
-    if (body.title === '' || body.url === '') {
+    if (!body.title || !body.url) {
       return response.status(400).json({
         error: 'title and/or url missing'
       })
@@ -55,19 +55,14 @@ blogsRouter.post('/', async (request, response) => {
       likes: body.likes === undefined ? 0 : body.likes,
       comments: body.comments === undefined ? [] : body.comments,
       user: user._id
-    });
+    })
 
     const savedBlog = await blog.save()
 
     user.blogs = user.blogs.concat(savedBlog._id)
     await user.save()
-    const populatedBlog = await Blog.findById(savedBlog._id).populate('user', {
-      id: 1,
-      username: 1,
-      name: 1
-    })
 
-    response.json(Blog.format(populatedBlog))
+    response.json(Blog.format(savedBlog))
   } catch (exception) {
     if (exception.name === 'JsonWebTokenError') {
       response.status(401).json({ error: exception.message })
@@ -114,12 +109,7 @@ blogsRouter.put('/:id', async (request, response) => {
     const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
       new: true
     })
-    const populatedBlog = await Blog.findById(updatedBlog.id).populate('user', {
-      id: 1,
-      username: 1,
-      name: 1
-    })
-    response.json(Blog.format(populatedBlog))
+    response.json(Blog.format(updatedBlog))
   } catch (exception) {
     console.log(exception)
     response.status(400).send({

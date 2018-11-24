@@ -10,6 +10,7 @@
     "react-redux": "^5.1.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^2.1.1",
+    "react-test-render": "^1.1.1",
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.5",
     "redux-thunk": "^2.3.0",
@@ -18,7 +19,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "CI=true react-scripts test --env=jsdom --verbose",
+    "test": "react-scripts test --env=jsdom --verbose",
     "eject": "react-scripts eject",
     "lint": "eslint --fix ./src"
   },
@@ -29,7 +30,11 @@
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.7.0",
     "eslint": "^5.6.0",
-    "eslint-plugin-jest": "^22.0.0"
+    "eslint-plugin-jest": "^22.0.0",
+    "faker": "^4.1.0",
+    "puppeteer": "^1.10.0",
+    "react-test-renderer": "^16.6.3",
+    "redux-mock-store": "^1.5.3"
   },
   "setupFiles": [
     "<rootDir>/src/setupTests.js"

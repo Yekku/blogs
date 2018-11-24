@@ -5,7 +5,7 @@ import { refreshUser } from '../reducers/userReducer'
 import { notify } from '../reducers/notificationReducer'
 import { Button, Form } from 'semantic-ui-react'
 
-class BlogForm extends React.Component {
+export class BlogForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {

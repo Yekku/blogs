@@ -6,7 +6,7 @@ import { refreshUser } from '../reducers/userReducer'
 import { notify } from '../reducers/notificationReducer'
 import { Button, Header, Segment, List, Form, Icon } from 'semantic-ui-react'
 
-class Blog extends React.Component {
+export class Blog extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -78,7 +78,7 @@ class Blog extends React.Component {
       )
     }
     return (
-      <div>
+      <div className="name">
         <div>
           <Icon name="reply" size="small" /><Link to={'/blogs'}>Back to bloglist</Link>
         </div>
@@ -113,7 +113,7 @@ class Blog extends React.Component {
                 <label htmlFor="comment">
                   comment
                 </label>
-                <textarea name="comment" id="password" value={this.state.comment} onChange={this.fieldChangeHandler} style={{ width: 300 }} />
+                <textarea name="comment" value={this.state.comment} onChange={this.fieldChangeHandler} style={{ width: 300 }} />
               </Form.Field>
               <Button type="submit">Add comment</Button>
             </Form>

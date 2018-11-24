@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { List } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 
-class BlogList extends React.Component {
+export class BlogList extends React.Component {
   render() {
     return <div>
       <h2>Blogs</h2>

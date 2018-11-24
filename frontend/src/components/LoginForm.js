@@ -7,7 +7,7 @@ import { notify } from '../reducers/notificationReducer'
 import { Button, Form } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 
-class LoginForm extends React.Component {
+export class LoginForm extends React.Component {
   constructor() {
     super()
     this.state = {
