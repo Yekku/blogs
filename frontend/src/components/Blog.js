@@ -91,7 +91,7 @@ export class Blog extends React.Component {
             For more information see this <a href={this.props.blog.url} target="blanck">link</a>
           </p>
           <Button content="Like" icon="heart" onClick={this.likeBlog(this.props.blog)} label={{ basic: true, pointing: 'right', content: `${this.props.blog.likes}` }} labelPosition="left" size="mini" />
-          <p style={{ marginTop: 10 }}>Added by {this.props.blog.user ? this.props.blog.user.username : 'anonymous'}</p>
+          <p style={{ marginTop: 10 }}>Added by {this.props.blog.user.name}</p>
           {(!this.props.blog.user || this.props.user.username === this.props.blog.user.username) &&
               <Button size="mini" type="button" onClick={this.removeBlog(this.props.blog)}>
                 delete
