@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "blogilist_backend",
   "main": "index.js",
+  "engines": {
+    "node": "8.9.x"
+  },
   "scripts": {
     "start": "NODE_ENV=production node index.js",
     "watch": "NODE_ENV=development nodemon index.js",
