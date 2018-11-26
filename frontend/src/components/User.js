@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { List } from 'semantic-ui-react'
+import { List, Icon } from 'semantic-ui-react'
 
 export class User extends React.Component {
 
@@ -9,6 +10,11 @@ export class User extends React.Component {
     const { user } = this.props
     return (
       <div>
+        <div>
+          <div>
+            <Icon name="reply" size="small" /><Link to={'/users'}>Back to users</Link>
+          </div>
+        </div>
         <h2>{user.name}</h2>
         <h3>Added blogs</h3>
         <List>

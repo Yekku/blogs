@@ -41,7 +41,7 @@ export class App extends React.Component {
     if (this.props.user === null) {
       return <Container>
         <Router>
-          <div>
+          <div style={{ paddingTop: 30 }}>
             <Notification />
             <LoginForm />
             <Route exact path="/create-new-user" render={({ history }) => <NewUserForm history={history} />} />
@@ -51,7 +51,7 @@ export class App extends React.Component {
     } else {
       return <Container>
         <Router>
-          <div>
+          <div style={{ paddingTop: 30 }}>
             <div>
               <Notification />
             </div>

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { likeBlog, removeBlog, commentBlog } from '../reducers/blogReducer'
 import { refreshUser } from '../reducers/userReducer'
+import { initBlogs } from '../reducers/blogReducer'
 import { notify } from '../reducers/notificationReducer'
 import { Button, Header, Segment, List, Form, Icon } from 'semantic-ui-react'
 
@@ -26,6 +27,7 @@ export class Blog extends React.Component {
   likeBlog = blog => async () => {
     try {
       await this.props.likeBlog(blog)
+      await this.props.initBlogs()
       this.props.notify(`liked blog '${blog.title}'`, 5)
     } catch (exception) {
       this.props.notify('liking blog failed', 5)
@@ -57,6 +59,7 @@ export class Blog extends React.Component {
     event.preventDefault()
     try {
       await this.props.commentBlog(blog, this.state.comment)
+      await this.props.initBlogs()
       this.setState({
         comment: ''
       })
@@ -78,7 +81,7 @@ export class Blog extends React.Component {
       )
     }
     return (
-      <div className="name">
+      <div>
         <div>
           <Icon name="reply" size="small" /><Link to={'/blogs'}>Back to bloglist</Link>
         </div>
@@ -113,7 +116,7 @@ export class Blog extends React.Component {
                 <label htmlFor="comment">
                   comment
                 </label>
-                <textarea name="comment" value={this.state.comment} onChange={this.fieldChangeHandler} style={{ width: 300 }} />
+                <textarea name="comment" value={this.state.comment} onChange={this.fieldChangeHandler} style={{ width: 300, height: 100 }} />
               </Form.Field>
               <Button type="submit">Add comment</Button>
             </Form>
@@ -140,7 +143,8 @@ const mapDispatchToProps = {
   removeBlog,
   likeBlog,
   commentBlog,
-  refreshUser
+  refreshUser,
+  initBlogs
 }
 
 export default connect(

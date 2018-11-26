@@ -20,7 +20,7 @@ const reducer = (state = [], action) => {
   }
 }
 
-const createBlog = (blog) => async (dispatch) => {
+export const createBlog = (blog) => async (dispatch) => {
   const newBlog = await blogService.create(blog)
   dispatch({
     type: 'CREATE',
@@ -28,7 +28,7 @@ const createBlog = (blog) => async (dispatch) => {
   })
 }
 
-const removeBlog = (blog) => async (dispatch) => {
+export const removeBlog = (blog) => async (dispatch) => {
   await blogService.remove(blog)
   dispatch({
     type: 'REMOVE',
@@ -36,7 +36,7 @@ const removeBlog = (blog) => async (dispatch) => {
   })
 }
 
-const likeBlog = (blog) => async (dispatch) => {
+export const likeBlog = (blog) => async (dispatch) => {
   const likedBlog = { ...blog }
   likedBlog.likes += 1
   const updatedBlog = await blogService.update(likedBlog)
@@ -46,7 +46,7 @@ const likeBlog = (blog) => async (dispatch) => {
   })
 }
 
-const commentBlog = (blog, comment) => async (dispatch) => {
+export const commentBlog = (blog, comment) => async (dispatch) => {
   const commentedBlog = { ...blog }
   commentedBlog.comments = [...commentedBlog.comments, comment]
   const updatedBlog = await blogService.update(commentedBlog)
@@ -56,7 +56,7 @@ const commentBlog = (blog, comment) => async (dispatch) => {
   })
 }
 
-const initBlogs = () => async (dispatch) => {
+export const initBlogs = () => async (dispatch) => {
   const blogs = await blogService.getAll()
   dispatch({
     type: 'INIT_BLOGS',
@@ -65,4 +65,3 @@ const initBlogs = () => async (dispatch) => {
 }
 
 export default reducer
-export { createBlog, removeBlog, likeBlog, initBlogs, commentBlog }
