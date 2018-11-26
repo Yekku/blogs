@@ -3,4 +3,6 @@ node_js:
   - node
 
 script:
-  - lint
+  - npm run test,
+  - npm run eslint
+  
