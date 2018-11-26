@@ -3,15 +3,11 @@
   "version": "1.0.0",
   "description": "blogilist_backend",
   "main": "index.js",
-  "engines": {
-    "node": "8.9.x"
-  },
   "scripts": {
     "start": "NODE_ENV=production node index.js",
     "watch": "NODE_ENV=development nodemon index.js",
     "test": "NODE_ENV=test jest --verbose",
-    "lint": "eslint .",
-    "heroku-postbuild": "cd frontend/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+    "lint": "eslint ."
   },
   "dependencies": {
     "bcrypt": "^3.0.2",
@@ -33,10 +29,6 @@
     "nodemon": "^1.18.4",
     "supertest": "^3.3.0"
   },
-  "cacheDirectories": [
-    "node_modules",
-    "frontend/node_modules"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Yekku/full-stack-osa-4.git"
