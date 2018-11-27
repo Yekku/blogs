@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { Container } from 'semantic-ui-react'
+import Sky from 'react-sky'
 import NavMenu from './components/NavMenu'
 import Home from './components/Home'
 import Notification from './components/Notification'
@@ -20,6 +21,9 @@ import { initUsers } from './reducers/userReducer'
 import { initBlogs } from './reducers/blogReducer'
 import { login } from './reducers/loginReducer'
 import './App.css'
+
+const imagesPath = process.env.PUBLIC_URL + '/images/'
+
 export class App extends React.Component {
 
   componentDidMount() {
@@ -41,7 +45,28 @@ export class App extends React.Component {
     if (this.props.user === null) {
       return <Container>
         <Router>
-          <div style={{ paddingTop: 30 }}>
+          <div style={{
+            paddingTop: 30,
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'column'
+          }}>
+            <Sky
+              images={{
+                /* FORMAT AS FOLLOWS */
+                0: `${imagesPath}Blogging.png`  /* You can pass as many images as you want */
+                /* 1: `${imagesPath}blog.png` */
+                /*2: myImage /* you can pass images in any form: link, imported via webpack... */
+                /* 3: your other image... */
+                /* 4: your other image... */
+                /* 5: your other image... */
+                /* ... */
+              }}
+              how={130} /* Pass the number of images Sky will render chosing randomly */
+              time={40} /* time of animation */
+              size={'100px'} /* size of the rendered images */
+              background={'palettedvioletred'} /* color of background */
+            />
             <Notification />
             <LoginForm />
             <Route exact path="/create-new-user" render={({ history }) => <NewUserForm history={history} />} />
