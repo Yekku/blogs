@@ -62,3 +62,8 @@ typings/
 
 # rest directory
 requests
+
+# node_moduls
+node_modules
+
+package-lock.json

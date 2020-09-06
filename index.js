@@ -11,11 +11,15 @@ const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
 
 mongoose
-  .connect(config.mongoUrl)
+  .connect(config.mongoUrl, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true
+  })
   .then(() => {
     console.log('connected to database', config.mongoUrl)
   })
-  .catch(err => {
+  .catch((err) => {
     console.log(err)
   })
 
